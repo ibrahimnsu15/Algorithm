@@ -1,0 +1,24 @@
+void ConstructTree(int input[],int segTree[],int low,int high,int pos){
+
+    if(low == high){
+        segTree[pos] = input[low];
+    }else{
+
+        int mid = (low+high)/2;
+        ConstructTree(input,segTree,low,mid,2*pos+1);
+        ConstructTree(input,segTree,mid+1,high,2*pos+2);
+        segTree[pos] = min(segTree[2*pos+1],segTree[2*pos+2]);
+    }
+
+}
+
+int RangeMinQuery(int segTree[] , int qlow , int qhigh , int low , int high , int pos){
+    if(qlow <= low && qhigh >= high){
+        return segTree[pos];
+    }else if(low > qhigh || high < qlow){
+        return INT_MAX;
+    }
+    int mid = (low+high)/2;
+
+    return min(RangeMinQuery(segTree,qlow,qhigh,low,mid,2*pos+1),RangeMinQuery(segTree,qlow,qhigh,mid+1,high,2*pos+2));
+}
